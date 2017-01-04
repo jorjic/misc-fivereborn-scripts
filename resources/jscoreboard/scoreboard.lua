@@ -16,14 +16,14 @@ local function DrawPlayerList()
 	
 	--Top bar title
 	SetTextFont( 4 )
-  SetTextProportional( 0 )
-  SetTextScale( 0.45, 0.45 )
-  SetTextColour( 255, 255, 255, 255 )
-  SetTextDropShadow( 0, 0, 0, 0, 255 )
-  SetTextEdge( 1, 0, 0, 0, 255 )
-  SetTextEntry( "STRING" )
-  AddTextComponentString( "Players: " .. #players )
-  DrawText( 0.015, 0.007 )
+	SetTextProportional( 0 )
+	SetTextScale( 0.45, 0.45 )
+	SetTextColour( 255, 255, 255, 255 )
+	SetTextDropShadow( 0, 0, 0, 0, 255 )
+	SetTextEdge( 1, 0, 0, 0, 255 )
+	SetTextEntry( "STRING" )
+	AddTextComponentString( "Players: " .. #players )
+	DrawText( 0.015, 0.007 )
 	
 	for k, v in pairs( players ) do
 		local r
