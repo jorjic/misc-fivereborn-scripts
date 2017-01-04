@@ -1,7 +1,3 @@
-local function GetActualPosixTimestamp()
-	return Citizen.InvokeNative(0x9A73240B49945C76, Citizen.ResultAsInteger())
-end
-
 local function DrawPlayerList()
     local players = {}
 
@@ -16,14 +12,14 @@ local function DrawPlayerList()
 	
 	--Top bar title
 	SetTextFont( 4 )
-	SetTextProportional( 0 )
-	SetTextScale( 0.45, 0.45 )
-	SetTextColour( 255, 255, 255, 255 )
-	SetTextDropShadow( 0, 0, 0, 0, 255 )
-	SetTextEdge( 1, 0, 0, 0, 255 )
-	SetTextEntry( "STRING" )
-	AddTextComponentString( "Players: " .. #players )
-	DrawText( 0.015, 0.007 )
+    SetTextProportional( 0 )
+    SetTextScale( 0.45, 0.45 )
+    SetTextColour( 255, 255, 255, 255 )
+    SetTextDropShadow( 0, 0, 0, 0, 255 )
+    SetTextEdge( 1, 0, 0, 0, 255 )
+    SetTextEntry( "STRING" )
+    AddTextComponentString( "Players: " .. #players )
+    DrawText( 0.015, 0.007 )
 	
 	for k, v in pairs( players ) do
 		local r
@@ -72,10 +68,10 @@ Citizen.CreateThread( function()
 		Wait( 0 )
 		
 		if IsControlPressed( 0, 20 ) then
-			LastPress = GetActualPosixTimestamp()
+			LastPress = GetGameTimer()
 		end
 		
-		if GetActualPosixTimestamp() < LastPress + 5 then
+		if GetGameTimer() < LastPress + 5000 then
 			DrawPlayerList()
 		end
 		
