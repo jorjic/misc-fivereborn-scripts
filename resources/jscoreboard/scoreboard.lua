@@ -1,3 +1,30 @@
+local Settings = {
+	--Should the scoreboard draw wanted level?
+	["WantedStars"] = false,
+	
+	--Should the scoreboard draw player ID?
+	["PlayerID"] = true,
+	
+	--Should the scoreboard draw voice indicator?
+	["VoiceIndicator"] = true,
+	
+	--Display time in milliseconds
+	["DisplayTime"] = 5000,
+	
+	--Keys that will activate the scoreboard.
+	--Change only the number value, NOT the 'true'
+	--Multiple keys can be used, simply add another row with another number
+	--See: https://wiki.gtanet.work/index.php?title=Game_Controls
+	
+	--MultiplayerInfo / Z
+	[20] = true,
+	
+	--Detonate / G
+	--[47] = true,
+}
+
+-- END OF SETTINGS --
+
 local function DrawPlayerList()
     local players = {}
 
@@ -44,18 +71,40 @@ local function DrawPlayerList()
 		SetTextScale( 0.45, 0.45 )
 		SetTextColour( 255, 255, 255, 255 )
 		SetTextEntry( "STRING" )
-		AddTextComponentString( GetPlayerName( v ) )
+		local name = GetPlayerName( v )
+		if Settings["PlayerID"] then
+			name = "[" .. GetPlayerServerId( v ) .. "] " .. name
+		end
+		AddTextComponentString( name )
 		DrawText( 0.015, 0.007 + ( k * 0.03 ) )
 		
 		
-		--Talk Indicator
-		local transparency = 60
-		
-		if NetworkIsPlayerTalking( v ) then
-			transparency = 255
+		--Voice Indicator
+		if Settings["VoiceIndicator"] then
+			local transparency = 60
+			
+			if NetworkIsPlayerTalking( v ) then
+				transparency = 255
+			end
+			
+			DrawSprite( "mplobby", "mp_charcard_stats_icons9", 0.2, 0.024 + ( k * 0.03 ), 0.015, 0.025, 0, 255, 255, 255, transparency )
 		end
 		
-		DrawSprite( "mplobby", "mp_charcard_stats_icons9", 0.2, 0.024 + ( k * 0.03 ), 0.015, 0.025, 0, 255, 255, 255, transparency )
+		--Wanted Stars
+		if Settings["WantedStars"] then
+			local wantedLevel = GetPlayerWantedLevel( v ) or 0
+			wantedLevel = wantedLevel
+			
+			for i=1, 5 do
+				local transparency = 60
+				
+				if wantedLevel >= i then
+					transparency = 255
+				end
+				
+				DrawSprite( "mpleaderboard", "leaderboard_star_icon", 0.195 - ( i * 0.010	 ), 0.024 + ( k * 0.03 ), 0.0175, 0.0275, 0, 255, 255, 255, transparency )
+			end
+		end
 	end
 end
 
@@ -63,15 +112,20 @@ local LastPress = 0
 
 Citizen.CreateThread( function()
 	RequestStreamedTextureDict( "mplobby" )
+	RequestStreamedTextureDict( "mpleaderboard" )
 	
 	while true do
 		Wait( 0 )
 		
-		if IsControlPressed( 0, 20 ) then
-			LastPress = GetGameTimer()
+		for k, v in pairs( Settings ) do
+			if type( k ) == "number" and v == true then
+				if IsControlPressed( 0, k ) then
+					LastPress = GetGameTimer()
+				end
+			end
 		end
 		
-		if GetGameTimer() < LastPress + 5000 then
+		if GetGameTimer() < LastPress + Settings["DisplayTime"] then
 			DrawPlayerList()
 		end
 		
