@@ -39,14 +39,14 @@ local function DrawPlayerList()
 	
 	--Top bar title
 	SetTextFont( 4 )
-    SetTextProportional( 0 )
-    SetTextScale( 0.45, 0.45 )
-    SetTextColour( 255, 255, 255, 255 )
-    SetTextDropShadow( 0, 0, 0, 0, 255 )
-    SetTextEdge( 1, 0, 0, 0, 255 )
-    SetTextEntry( "STRING" )
-    AddTextComponentString( "Players: " .. #players )
-    DrawText( 0.015, 0.007 )
+	SetTextProportional( 0 )
+	SetTextScale( 0.45, 0.45 )
+	SetTextColour( 255, 255, 255, 255 )
+	SetTextDropShadow( 0, 0, 0, 0, 255 )
+	SetTextEdge( 1, 0, 0, 0, 255 )
+	SetTextEntry( "STRING" )
+	AddTextComponentString( "Players: " .. #players )
+	DrawText( 0.015, 0.007 )
 	
 	for k, v in pairs( players ) do
 		local r
@@ -71,11 +71,7 @@ local function DrawPlayerList()
 		SetTextScale( 0.45, 0.45 )
 		SetTextColour( 255, 255, 255, 255 )
 		SetTextEntry( "STRING" )
-		local name = GetPlayerName( v )
-		if Settings["PlayerID"] then
-			name = "[" .. GetPlayerServerId( v ) .. "] " .. name
-		end
-		AddTextComponentString( name )
+		AddTextComponentString( GetPlayerName( v ) )
 		DrawText( 0.015, 0.007 + ( k * 0.03 ) )
 		
 		
